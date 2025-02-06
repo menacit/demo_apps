@@ -1,0 +1,78 @@
+---
+services:
+  "proxy.example.test":
+    image: "docker.io/library/caddy:2.9.1-alpine"
+    volumes:
+      - "./miscellaneous/Caddyfile:/etc/caddy/Caddyfile:ro"
+    ports:
+      - "80:8080"
+    
+  "database.example.test":
+    image: "docker.io/rqlite/rqlite:8.36.11"
+    volumes:
+      - "./miscellaneous/database_users.json:/etc/database_users.json:ro"
+      - "database_data:/rqlite/file"
+    command:
+      - "-auth"
+      - "/etc/database_users.json"
+    healthcheck:
+      interval: "5s"
+      retries: 10
+      test:
+        - "CMD"
+        - "wget"
+        - "-O"
+        - "-"
+        - "http://127.0.0.1:4001/readyz"
+      
+  "recipes.example.test":
+    build:
+      dockerfile: "Dockerfile"
+      context: "recipes"
+    environment:
+      "APP_DEBUG_LOGGING": "disabled"
+
+  "analytics.example.test":
+    build:
+      dockerfile: "Dockerfile"
+      context: "analytics"
+    environment:
+      "APP_DEBUG_LOGGING": "disabled"
+      "APP_RECIPES_URL": "http://recipes.example.test:1338"
+
+  "favorites.example.test":
+    build:
+      dockerfile: "Dockerfile"
+      context: "favorites"
+    environment:
+      "APP_ACCESS_KEY": "thisisademo"
+      "APP_DATABASE_URL": "http://database.example.test:4001/?disableClusterDiscovery=true"
+      "APP_DATABASE_USER": "demouser"
+      "APP_DATABASE_PASSWORD": "demopassword"
+    depends_on:
+      "database.example.test":
+        condition: "service_healthy"
+
+  "authentication.example.test":
+    build:
+      dockerfile: "Dockerfile"
+      context: "authentication"
+    environment:
+      "APP_DEBUG_LOGGING": "disabled"
+      "APP_SIGNING_SECRET": "exampledonotuse"
+
+  "frontend.example.test":
+    build:
+      dockerfile: "Dockerfile"
+      context: "frontend"
+    environment:
+      "APP_DEBUG_LOGGING": "disabled"
+      "APP_RECIPES_URL": "http://recipes.example.test:1338"
+      "APP_ANALYTICS_URL": "http://analytics.example.test:1338"
+      "APP_FAVORITES_URL": "http://favorites.example.test:8000"
+      "APP_FAVORITES_ACCESS_KEY": "thisisademo"
+      "APP_AUTHENTICATION_URL": "http://authentication.example.test:8000"
+      "APP_AUTHENTICATION_REDIRECT_URL": "/login"
+
+volumes:
+  "database_data": {}

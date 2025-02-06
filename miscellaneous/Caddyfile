@@ -1,0 +1,18 @@
+http://:8080 {
+	log stderr
+	
+	handle /login {
+		rewrite /login /gui
+		reverse_proxy http://authentication.example.test:8000
+	}
+
+	handle_path /api/v1/recipes/* {
+		rewrite * /api{uri}
+		reverse_proxy http://recipes.example.test:1338
+	}
+
+	handle /* {
+		rewrite * /gui{uri}
+		reverse_proxy http://frontend.example.test:8000
+	}
+}

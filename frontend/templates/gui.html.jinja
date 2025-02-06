@@ -1,0 +1,87 @@
+{#
+#}
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+<title>&#129380; Cocktails</title>
+<style type="text/css">
+* {
+    background-color: black;
+    color: lightgreen;
+    font-family: monospace;
+}
+
+.recipe {
+    white-space: pre-wrap;
+    word-break: keep-all;
+}
+</style>
+<script>
+function logout() {
+    console.log("Deleting authentication cookie and reloading page");
+    document.cookie = "user_token=";
+    document.location.reload();
+}
+</script>
+</head>
+<body>
+<marquee><h1>&#129380; Cocktails &#127868;</h1></marquee>
+
+{% if user != 'unknown' %}
+<h2>
+&#129489; Greetings, {{ user }}!
+<i>(<a href="javascript:logout();">logout</a>)</i>
+</h2>
+{% endif %}
+
+{% if favorites_enabled %}
+<h2>&#128151; Number of favorites: {{ favorites | length }}</h2>
+{% endif %}
+
+{% if top_ingredients %}
+<h2>&#128202; Most common ingredients:</h2>
+<ol>
+{% for top_ingredient in top_ingredients %}
+<li>{{ top_ingredient }}</li>
+{% endfor %}
+</ol>
+{% endif %}
+
+<h2>&#128588; IBA cocktail recipes:</h2>
+<!-- cocktail data below: -->
+
+{% for recipe in recipes %}
+<hr />
+<h3 id="{{ recipe.name }}"></h3>
+<pre {% if recipe.name in favorites %}style="color:yellow"{% endif %}>
+{{ recipe.figlet_name }}
+</pre>
+<pre class="recipe">
+## Ingredients
+{% for ingredient in recipe.ingredients  %}
+{% if 'special' in ingredient %}
+- {{ ingredient.special }}
+{% else %}
+- {{ ingredient.amount }} {{ ingredient.unit }}: {{ ingredient.ingredient }}
+{% endif %}
+{% endfor %}
+
+## Instructions
+{{ recipe.preparation }}
+</pre>
+</div>
+
+{% if favorites_enabled %}
+<h3
+{% if recipe.name in favorites %}
+style="text-decoration:line-through"
+{% endif %}
+>
+<a href="./add_favorite/{{ recipe.name }}">&#127864; Add to favorites!</a>
+</h3>
+{% endif %}
+
+{% endfor %}
+</body>
+</html>

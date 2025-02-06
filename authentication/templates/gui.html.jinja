@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+<title>&#x1F513; Authentication</title>
+<style type="text/css">
+* {
+    background-color: black;
+    color: lightgreen;
+    font-family: monospace;
+}
+</style>
+</head>
+<body>
+<h1>&#x1F513; Authentication</h1>
+<p>Choose a user to login as:</p>
+<ol>
+{% for user in users %}
+<li>
+<a href="{{ user.target_url }}">{{ user.name }}</a>
+</li>
+{% endfor %}
+</ol>
+</body>
+</html>

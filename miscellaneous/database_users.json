@@ -1,0 +1,4 @@
+[
+  {"username": "demouser", "password": "demopassword", "perms": ["all"]},
+  {"username": "*", "perms": ["status", "ready"]}
+]

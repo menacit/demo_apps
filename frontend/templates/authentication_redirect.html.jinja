@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+<title>&#x1F9F9; Redirecting...</title>
+<style type="text/css">
+* {
+    background-color: black;
+    color: lightgreen;
+    font-family: monospace;
+}
+</style>
+<script>
+    document.location = "{{ redirect_url }}?redirect_url=" 
+                        + encodeURIComponent(document.location); 
+</script>
+</head>
+<body>
+<p>&#x1F9F9; Redirecting to authentication application....</p>
+</body>
+</html>
