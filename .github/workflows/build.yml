@@ -53,7 +53,7 @@ jobs:
         with:
           context: "${{ matrix.application }}"
           build-args:
-            - "APP_VERSION={{ matrix.version }}"
+            - "APP_VERSION=${{ matrix.version }}"
           tags: "${{ env.REGISTRY }}/${{ steps.lowercaser.outputs.prefix }}/${{ matrix.application }}:${{ matrix.version }}"
           platforms: "linux/amd64,linux/arm64"
           push: true
