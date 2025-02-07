@@ -106,12 +106,16 @@ EXCLUDED_INGREDIENTS = os.getenv(
 # Extract information about runtime environment for debugging
 HOST_NAME = platform.node()
 K8S_NODE_NAME = os.getenv('K8S_NODE_NAME')
+VERSION = os.getenv('APP_VERSION')
 
 if K8S_NODE_NAME:
     HOST_STRING = f'pod {HOST_NAME} on node {K8S_NODE_NAME}'
 
 else:
     HOST_STRING = f'host {HOST_NAME}'
+
+if VERSION:
+    HOST_STRING += f' (app {VERSION})'
 
 # -----------------------------------------------------------------------------
 # Import third-party Python dependencies -

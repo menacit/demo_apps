@@ -6,6 +6,9 @@ WORKDIR /usr/src/app
 RUN pip install --no-cache-dir Flask==3.1.0 requests==2.32.3
 COPY recipes_server.py .
 
+ARG APP_VERSION=v1
+ENV APP_VERSION=$APP_VERSION
+
 USER 10000
 EXPOSE 1338
 CMD ["python", "recipes_server.py"]

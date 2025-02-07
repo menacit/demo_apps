@@ -29,6 +29,8 @@ services:
     build:
       dockerfile: "Dockerfile"
       context: "recipes"
+      args:
+        "APP_VERSION": "v2"
     environment:
       "APP_DEBUG_LOGGING": "disabled"
 
