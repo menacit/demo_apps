@@ -5,8 +5,8 @@
 
 Example usage:
 
-GET /gui : Returns HTML page.
-GET / : Health/Readiness end-point.
+GET / : Returns HTML page.
+GET /healthz : Health/Readiness end-point.
 
 Listens for HTTP on port 8000/TCP by default.
 Settings configurable using environment variables:
@@ -154,7 +154,7 @@ def append_debug_headers(response):
 # -----------------------------------------------------------------------------
 @app.before_request
 def check_authentication():
-    if request.path == '/':
+    if request.path == '/healthz':
         return
 
     if not BASE_URL['authentication']:
@@ -204,13 +204,13 @@ def check_authentication():
 
 
 # -----------------------------------------------------------------------------
-@app.route('/')
+@app.route('/healthz')
 def return_health():
     return f'Hello from frontend server on {HOST_STRING}!\n'
 
 
 # -----------------------------------------------------------------------------
-@app.route('/gui/add_favorite/<drink_name>')
+@app.route('/add_favorite/<drink_name>')
 def add_favorite(drink_name):
     log.info(f'Adding "{drink_name}" as favorite for user "{context.user}"')
 
@@ -231,7 +231,7 @@ def add_favorite(drink_name):
 
 
 # -----------------------------------------------------------------------------
-@app.route('/gui')
+@app.route('/')
 def return_gui():
     log.info('Rendering HTML page for cocktails GUI')
 

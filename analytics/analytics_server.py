@@ -111,6 +111,16 @@ def append_debug_headers(response):
 # -----------------------------------------------------------------------------
 @app.route('/')
 def return_health():
+    try:
+        http_get(RECIPES_URL).raise_for_status()
+
+    except Exception as error_message:
+        log.warning(
+            f'Failed to communicate with "{RECIPES_URL}": "{error_message}"')
+
+        return jsonify('Failed to communicate with recipes services'), 500
+        
+    
     return f'Hello from analytics API server on {HOST_STRING}!\n'
 
 
@@ -128,7 +138,7 @@ def return_top_ingredients(limit):
         recipes = recipes_response.json()
         
     except Exception as error_message:
-        log.error(
+        log.warning(
             f'Failed to fetch data from "{RECIPES_URL}": "{error_message}"')
 
         return jsonify('Failed to fetch recipe data for analysis'), 500

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: cocktails
+  name: analytics
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      application: analytics
+  template:
+    metadata:
+      labels:
+        application: analytics
+    spec:
+      containers:
+        - name: application-container
+          image: ghcr.io/menacit/demo_apps/analytics:v1
+          ports:
+            - name: http-api
+              containerPort: 1338
+          livenessProbe:
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: 1338
+          readinessProbe:
+            periodSeconds: 3
+            timeoutSeconds: 2
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 1338
+          env:
+            - name: APP_RECIPES_URL
+              value: http://recipes
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName

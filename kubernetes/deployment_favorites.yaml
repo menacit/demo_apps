@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: cocktails
+  name: favorites
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      application: favorites
+  template:
+    metadata:
+      labels:
+        application: favorites
+    spec:
+      containers:
+        - name: application-container
+          image: ghcr.io/menacit/demo_apps/favorites:v1
+          ports:
+            - name: http-api
+              containerPort: 8000
+          env:
+            - name: APP_DATABASE_URL
+              value: http://database:4001
+            - name: APP_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database
+                  key: user
+            - name: APP_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database
+                  key: password
+            - name: APP_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: favorites
+                  key: access_key
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName

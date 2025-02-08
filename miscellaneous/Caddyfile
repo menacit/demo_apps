@@ -2,7 +2,7 @@ http://:8080 {
 	log stderr
 	
 	handle /login {
-		rewrite /login /gui
+		rewrite /login /
 		reverse_proxy http://authentication.example.test:8000
 	}
 
@@ -12,7 +12,6 @@ http://:8080 {
 	}
 
 	handle /* {
-		rewrite * /gui{uri}
 		reverse_proxy http://frontend.example.test:8000
 	}
 }

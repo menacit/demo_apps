@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: cocktails
+  name: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      application: frontend
+  template:
+    metadata:
+      labels:
+        application: frontend
+    spec:
+      containers:
+        - name: application-container
+          image: ghcr.io/menacit/demo_apps/frontend:v1
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: APP_RECIPES_URL
+              value: http://recipes
+            - name: APP_ANALYTICS_URL
+              value: http://analytics
+            - name: APP_FAVORITES_URL
+              value: http://favorites
+            - name: APP_FAVORITES_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: favorites
+                  key: access_key
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName

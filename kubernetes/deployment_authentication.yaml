@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: shared
+  name: authentication
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      application: authentication
+  template:
+    metadata:
+      labels:
+        application: authentication
+    spec:
+      containers:
+        - name: application-container
+          image: ghcr.io/menacit/demo_apps/authentication:v1
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: APP_SIGNING_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: authentication
+                  key: signing_secret
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
