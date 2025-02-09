@@ -9,4 +9,4 @@ spec:
     application: analytics
   ports:
     - port: 80
-      targetPort: http
+      targetPort: http-api

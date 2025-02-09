@@ -9,16 +9,12 @@ spec:
     matchLabels:
       application: analytics
   ingress:
-    - ports:
-        - port: http-api
-      from:
+    - from:
         - podSelector:
             matchLabels:
               application: frontend
   egress:
-    - ports:
-        - port: http-api
-      to:
+    - to:
         - podSelector:
             matchLabels:
               application: recipes

@@ -9,16 +9,12 @@ spec:
     matchLabels:
       application: favorites
   ingress:
-    - ports:
-        - port: http-api
-      from:
+    - from:
         - podSelector:
             matchLabels:
               application: frontend
   egress:
-    - ports:
-        - port: client
-      to:
+    - to:
         - podSelector:
             matchLabels:
               application: database
