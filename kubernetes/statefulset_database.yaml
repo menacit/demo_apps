@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: cocktails
+  name: database
+spec:
+  serviceName: database-cluster
+  replicas: 3
+  selector:
+    matchLabels:
+      application: database
+  volumeClaimTemplates:
+    - metadata:
+        name: persistent-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  template:
+    metadata:
+      labels:
+        application: database
+    spec:
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: secrets
+          secret:
+            secretName: database
+      containers:
+        - name: application-container
+          image: docker.io/rqlite/rqlite:8.36.11
+          args:
+            - -auth
+            - /secrets/access_configuration.json
+            - -disco-mode=dns
+            - -disco-config={"name":"database-cluster"}
+            - -bootstrap-expect=3
+            - -join-interval=1s
+            - -join-attempts=120
+          volumeMounts:
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
+            - name: persistent-data
+              mountPath: /rqlite/file
+          ports:
+            - containerPort: 4001
+              name: client
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 5
+            httpGet:
+              path: /readyz?noleader
+              port: client
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+            httpGet:
+              path: /readyz
+              port: client

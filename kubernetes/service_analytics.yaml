@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service                                        
+metadata:
+  namespace: cocktails
+  name: analytics
+spec:                                                                                      
+  selector:
+    application: analytics
+  ports:
+    - port: 80
+      targetPort: http

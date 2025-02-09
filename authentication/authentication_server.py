@@ -6,8 +6,8 @@
 Example usage:
 
 GET /api/check/<TOKEN> : Returns username for validated tokens. 
-GET /?redirect=/test : Displays user selection page.
-GET /?redirect=/test&user=bob Authenticates client as Bob.
+GET /login?redirect=/test : Displays user selection page.
+GET /login?redirect=/test&user=bob Authenticates client as Bob.
 GET /healthz : Health/Readiness end-point.
 
 Listens for HTTP on port 8000/TCP by default.
@@ -105,7 +105,7 @@ def return_health():
 
 
 # -----------------------------------------------------------------------------
-@app.route('/')
+@app.route('/login')
 def return_gui():
     log.info('Generating redirect or HTML page for authentication GUI')
 

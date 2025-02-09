@@ -21,7 +21,7 @@ spec:
               containerPort: 8000
           env:
             - name: APP_DATABASE_URL
-              value: http://database:4001
+              value: http://database:4001/?disableClusterDiscovery=true
             - name: APP_DATABASE_USER
               valueFrom:
                 secretKeyRef:

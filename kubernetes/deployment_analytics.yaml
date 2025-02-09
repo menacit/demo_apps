@@ -25,14 +25,14 @@ spec:
             failureThreshold: 5
             httpGet:
               path: /
-              port: 1338
+              port: http-api
           readinessProbe:
             periodSeconds: 3
             timeoutSeconds: 2
             failureThreshold: 3
             httpGet:
               path: /
-              port: 1338
+              port: http-api
           env:
             - name: APP_RECIPES_URL
               value: http://recipes
