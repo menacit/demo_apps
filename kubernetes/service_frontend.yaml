@@ -3,10 +3,10 @@ apiVersion: v1
 kind: Service                                        
 metadata:
   namespace: cocktails
-  name: analytics
+  name: frontend
 spec:                                                                                      
   selector:
-    application: analytics
+    application: frontend
   ports:
     - port: 80
-      targetPort: http
+      targetPort: http-server

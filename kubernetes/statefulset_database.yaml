@@ -1,11 +1,13 @@
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   namespace: cocktails
   name: database
 spec:
-  serviceName: database-cluster
   replicas: 3
+  serviceName: database-cluster
+  podManagementPolicy: Parallel
   selector:
     matchLabels:
       application: database
@@ -32,13 +34,13 @@ spec:
         - name: application-container
           image: docker.io/rqlite/rqlite:8.36.11
           args:
-            - -auth
-            - /secrets/access_configuration.json
+            - -auth=/secrets/access_configuration.json
             - -disco-mode=dns
             - -disco-config={"name":"database-cluster"}
             - -bootstrap-expect=3
+            - -join-as=example_user
             - -join-interval=1s
-            - -join-attempts=120
+            - -join-attempts=300
           volumeMounts:
             - name: secrets
               mountPath: /secrets
@@ -48,6 +50,8 @@ spec:
           ports:
             - containerPort: 4001
               name: client
+            - containerPort: 4002
+              name: peer
           livenessProbe:
             initialDelaySeconds: 5
             periodSeconds: 5

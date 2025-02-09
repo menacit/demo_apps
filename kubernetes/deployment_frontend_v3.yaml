@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,7 +18,7 @@ spec:
         - name: application-container
           image: ghcr.io/menacit/demo_apps/frontend:v1
           ports:
-            - name: http
+            - name: http-server
               containerPort: 8000
           env:
             - name: APP_RECIPES_URL

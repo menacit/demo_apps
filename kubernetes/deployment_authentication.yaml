@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,9 +16,9 @@ spec:
     spec:
       containers:
         - name: application-container
-          image: ghcr.io/menacit/demo_apps/authentication:v1
+          image: ghcr.io/menacit/demo_apps/authentication:v2
           ports:
-            - name: http
+            - name: http-server
               containerPort: 8000
           env:
             - name: APP_SIGNING_SECRET

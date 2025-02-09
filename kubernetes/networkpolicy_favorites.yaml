@@ -1,0 +1,24 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  namespace: cocktails
+  name: favorites
+spec:
+  podSelector:
+    matchLabels:
+      application: favorites
+  ingress:
+    - ports:
+        - port: http-api
+      from:
+        - podSelector:
+            matchLabels:
+              application: frontend
+  egress:
+    - ports:
+        - port: client
+      to:
+        - podSelector:
+            matchLabels:
+              application: database
