@@ -8,6 +8,9 @@ spec:
   containers:
     - name: application-container
       image: ghcr.io/menacit/demo_apps/recipes:v1
+      ports:
+        - name: http-api
+          containerPort: 1338
       env:
         - name: K8S_NODE_NAME
           valueFrom:
