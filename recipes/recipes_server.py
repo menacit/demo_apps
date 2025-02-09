@@ -207,7 +207,7 @@ def return_cocktails():
     response_cocktails = []
 
     for recipe in random.sample(RECIPES, len(RECIPES)):
-        if filter and not filter in cocktail['name']:
+        if filter and not filter in recipe['name']:
             continue
 
         response_cocktails.append(recipe)
