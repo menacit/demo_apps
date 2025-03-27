@@ -4,6 +4,8 @@ kind: Pod
 metadata:
   namespace: cocktails
   name: recipes
+  labels:
+    application: recipes
 spec:
   containers:
     - name: application-container

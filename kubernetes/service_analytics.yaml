@@ -1,10 +1,10 @@
 ---
 apiVersion: v1
-kind: Service                                        
+kind: Service
 metadata:
   namespace: cocktails
   name: analytics
-spec:                                                                                      
+spec:
   selector:
     application: analytics
   ports:
